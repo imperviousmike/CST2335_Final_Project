@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="root_AppSelection">Sélectionnez une Application</string>
+    <string name="root_globeButton">Source de données géographiques</string>
+    <string name="root_soccerButton">Faits saillants du match de football</string>
+    <string name="root_songLyrics">Recherche de paroles de chansons</string>
+    <string name="root_deezerButton">Recherche de chansons Deezer</string>
+    <string name="root_toast_message">"L'application n'est pas encore prête, revenez plus tard  "</string>
+    <string name="app_name">" CST2335 Project"</string>
+    <string name="deezer_searchTitle">Chercher</string>
+    <string name="deezer_searchText">Saisissez un nom d\'artiste pour lancer la recherche</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="nav_header">CST2335 - S20 - Projet final</string>
+    <string name="nav_author">Michael Daly</string>
+    <string name="nav_version">1.0.0</string>
+    <string name="nav_instructions">Instructions pour cette application</string>
+    <string name="nav_about">À propos de l\'API</string>
+    <string name="nav_donate">Faire un don au projet</string>
+    <string name="toolbar_about">À propos de ce projet</string>
+    <string name="nav_instruction_message">Recherchez un artiste pour obtenir une liste de chansons. Si vous souhaitez suivre une chanson, sélectionnez-la avec une longue attente et ajoutez-la à vos favoris. Pour le supprimer, rendez-vous dans la section des favoris et effectuez la même action.</string>
+    <string name="toolbar_about_msg">C\'est l\'activité Deezer, écrite par Michael Daly</string>
+    <string name="nav_donate_msg">Combien d\'argent voulez-vous donner?</string>
+    <string name="nav_donate_hint">$$$$</string>
+</resources>

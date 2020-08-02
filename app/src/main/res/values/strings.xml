@@ -1,0 +1,24 @@
+<resources>
+    <string name="root_AppSelection">Select An App</string>
+    <string name="root_globeButton">Geo Data Source</string>
+    <string name="root_soccerButton">Soccer match highlights</string>
+    <string name="root_songLyrics">Song Lyrics Search</string>
+    <string name="root_deezerButton">Deezer song search</string>
+    <string name="root_toast_message">App not ready yet, check back later</string>
+    <string name="app_name">" CST2335 Project"</string>
+    <string name="deezer_searchTitle">Search</string>
+    <string name="deezer_searchText">Type an artist name to begin the search</string>
+    <string name="open">Open</string>
+    <string name="close">close</string>
+    <string name="nav_header">CST2335 - S20 - Final Project</string>
+    <string name="nav_author">Michael Daly</string>
+    <string name="nav_version">1.0.0</string>
+    <string name="nav_instructions">Instructions for this app</string>
+    <string name="nav_about">About the API</string>
+    <string name="nav_donate">Donate to Project</string>
+    <string name="toolbar_about">About this project</string>
+    <string name="nav_instruction_message">Search for an artist to get a list of songs. If you want to track a song select it with a long hold and add to your favorites. To remove it, head to the favorites section and do the same action.</string>
+    <string name="toolbar_about_msg">his is the Deezer activity, written by Michael Daly</string>
+    <string name="nav_donate_msg">How much money do you want to donate?</string>
+    <string name="nav_donate_hint">$$$$</string>
+</resources>

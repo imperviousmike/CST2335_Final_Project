@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:rowCount="3"
+    android:columnCount="2"
+    tools:context="com.example.root.LaunchActivity">
+
+    <TextView
+        android:id="@+id/headerText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="32dp"
+        android:paddingBottom="20dp"
+        android:layout_row="0"
+        android:layout_columnSpan="2"
+        android:text="@string/root_AppSelection" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/globeButton"
+                android:drawableTop="@drawable/world"
+                android:layout_width="0dp"
+                android:background="@android:color/transparent"
+                android:layout_height="fill_parent"
+                android:text="@string/root_globeButton"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/soccerButton"
+                android:drawableTop="@drawable/soccer"
+                android:background="@android:color/transparent"
+                android:layout_width="0dp"
+                android:text="@string/root_soccerButton"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/lyricButton"
+                android:drawableTop="@drawable/lyrics"
+                android:background="@android:color/transparent"
+                android:layout_width="0dp"
+                android:text="@string/root_songLyrics"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/deezerButton"
+                android:drawableTop="@drawable/deezer"
+                android:background="@android:color/transparent"
+                android:layout_width="0dp"
+                android:text="@string/root_deezerButton"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
+        </TableRow>
+
+    </TableLayout>
+</GridLayout>
