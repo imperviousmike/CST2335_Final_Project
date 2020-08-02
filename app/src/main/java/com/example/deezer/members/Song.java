@@ -10,9 +10,21 @@ public class Song implements Serializable {
     private String albumCover;
     private String artist;
 
+    private int id;
+
     public static final long serialVersionUID = 1L;
 
     public Song(String title, String duration, String albumName, String albumCover, String artist) {
+        this.title = title;
+        this.duration = duration;
+        this.albumName = albumName;
+        this.albumCover = albumCover;
+        this.artist = artist;
+        id = 0;
+    }
+
+    public Song(int id, String title, String duration, String albumName, String albumCover, String artist) {
+        this.id = id;
         this.title = title;
         this.duration = duration;
         this.albumName = albumName;
@@ -22,6 +34,14 @@ public class Song implements Serializable {
 
     public Song() {
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
