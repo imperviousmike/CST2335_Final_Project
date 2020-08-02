@@ -14,7 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -85,6 +87,16 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
 
         ArtistQuery req = new ArtistQuery();
         req.execute(url);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent gotoResults = new Intent(SearchResultsActivity.this, SongsResultsActivity.class);
+                EditText search = findViewById(R.id.searchText);
+                gotoResults.putExtra("artist",artistList.get(position));
+                startActivity(gotoResults);
+            }
+        });
 
 
     }
@@ -262,9 +274,8 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                 artistPictures.add(image);
             }
 
-
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
             publishProgress(100);
             return "Done";

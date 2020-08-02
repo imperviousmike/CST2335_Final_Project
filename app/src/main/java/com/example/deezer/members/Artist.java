@@ -1,9 +1,13 @@
 package com.example.deezer.members;
 
-public class Artist {
+import java.io.Serializable;
+
+public class Artist implements Serializable {
     private String name;
     private String picture;
     private String songs;
+
+    public static final long serialVersionUID = 1L;
 
     public Artist(String name, String picture, String songs) {
         this.name = name;
