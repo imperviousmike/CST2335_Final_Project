@@ -3,25 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <item
-        android:id="@+id/instruc"
-        android:icon="@drawable/instructions"
-        android:orderInCategory="50"
-        android:title="@string/nav_instructions"
-        app:showAsAction="always" />  <!-- This uses showAsAction=always, so look at icon= parameter -->
+    <item android:title="@string/nav_header_deezer">
+        <menu>
+            <item
+                android:id="@+id/search"
+                android:icon="@drawable/search"
+                android:title="@string/nav_search" />
+            <item
+                android:id="@+id/fav"
+                android:icon="@drawable/heart"
+                android:title="@string/nav_favorite" />
+        </menu>
+    </item>
+
+    <item android:title="@string/nav_header_app">
+        <menu>
+            <item
+                android:id="@+id/instruc"
+                android:icon="@drawable/instructions"
+                android:orderInCategory="50"
+                android:title="@string/nav_instructions"
+                app:showAsAction="always" />
 
 
-    <item
-        android:id="@+id/aboutAPI"
-        android:icon="@drawable/about"
-        android:orderInCategory="100"
-        android:title="@string/nav_about"
-        app:showAsAction="always" /> <!-- This uses showAsAction=never, so look at title= parameter -->
+            <item
+                android:id="@+id/aboutAPI"
+                android:icon="@drawable/about"
+                android:orderInCategory="100"
+                android:title="@string/nav_about"
+                app:showAsAction="always" />
 
-    <item
-        android:id="@+id/donate"
-        android:icon="@drawable/donate"
-        android:orderInCategory="200"
-        android:title="@string/nav_donate"
-        app:showAsAction="always" />
+            <item
+                android:id="@+id/donate"
+                android:icon="@drawable/donate"
+                android:orderInCategory="200"
+                android:title="@string/nav_donate"
+                app:showAsAction="always" />
+        </menu>
+    </item>
 </menu>

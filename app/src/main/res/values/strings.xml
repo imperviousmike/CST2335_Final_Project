@@ -21,4 +21,8 @@
     <string name="toolbar_about_msg">his is the Deezer activity, written by Michael Daly</string>
     <string name="nav_donate_msg">How much money do you want to donate?</string>
     <string name="nav_donate_hint">$$$$</string>
+    <string name="nav_favorite">Favorites</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_header_deezer">Deezer</string>
+    <string name="nav_header_app">Application</string>
 </resources>

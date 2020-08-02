@@ -19,6 +19,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.root.R;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
+
 public class DeezerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
