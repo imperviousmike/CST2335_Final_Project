@@ -1,10 +1,13 @@
 package com.example.deezer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,8 +35,13 @@ import com.google.android.material.navigation.NavigationView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +59,7 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
         setContentView(R.layout.activity_search_results);
 
         artistList = new ArrayList<>();
+        artistPictures = new ArrayList<>();
         Intent fromDeezer = getIntent();
         String search = fromDeezer.getStringExtra("search");
         String url = String.format("https://api.deezer.com/search/artist/?q=%s&output=xml", search);
@@ -221,12 +231,48 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                     eventType = xpp.next(); //move to the next xml event and store it in a variable
                 }
 
+            for(Artist a : artistList){
+                String imageName = null;
+                try {
+                    URL u = new URL(a.getPicture());
+                    imageName = u.getFile().split("/")[4];
+                } catch (MalformedURLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                Bitmap image = null;
+                url = new URL(a.getPicture());
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.connect();
+                int responseCode = urlConnection.getResponseCode();
+                if (responseCode == 200) {
+                    image = BitmapFactory.decodeStream(urlConnection.getInputStream());
+                }
+                if (fileExistance(imageName)) {
+                    FileInputStream fis = null;
+                    try {    fis = openFileInput(imageName);   }
+                    catch (FileNotFoundException e) {    e.printStackTrace();  }
+                    Bitmap bm = BitmapFactory.decodeStream(fis);
+                } else {
+                    FileOutputStream outputStream = openFileOutput( imageName, Context.MODE_PRIVATE);
+                    image.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+                }
+                artistPictures.add(image);
+            }
+
 
             } catch (Exception e) {
 
             }
             publishProgress(100);
             return "Done";
+        }
+
+        public boolean fileExistance(String fname) {
+            File file = getBaseContext().getFileStreamPath(fname);
+            return file.exists();
         }
 
         public void onProgressUpdate(Integer... args) {
@@ -262,6 +308,9 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
             newView = inflater.inflate(R.layout.row_layout, parent, false);
             tView = newView.findViewById(R.id.rowText);
             tView.setText(getItem(position).toString());
+            ImageView iView;
+            iView = newView.findViewById(R.id.rowImage);
+            iView.setImageBitmap(artistPictures.get(position));
             return newView;
         }
     }
