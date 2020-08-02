@@ -104,14 +104,13 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
                 dataToPass.putParcelable("cover", albumPictures.get(position));
 
                 if (isTablet) {
-                    dFragment = new DetailsFragment(); //add a DetailFragment
-                    dFragment.setArguments(dataToPass); //pass it a bundle for information
+                    dFragment = new DetailsFragment();
+                    dFragment.setArguments(dataToPass);
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.frame, dFragment) //Add the fragment in FrameLayout
-                            .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
-                } else //isPhone
-                {
+                            .replace(R.id.frame, dFragment)
+                            .commit();
+                } else {
                     Intent nextActivity = new Intent(SongsResultsActivity.this, EmptyActivity.class);
                     nextActivity.putExtras(dataToPass); //send data to next activity
                     startActivity(nextActivity); //make the transition
@@ -120,220 +119,220 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
         });
 
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        String message = null;
+        switch (item.getItemId()) {
+            case R.id.globe:
+            case R.id.soccer:
+            case R.id.lyric:
+                message = getResources().getString(R.string.root_toast_message);
+                break;
+            case R.id.about:
+                message = getResources().getString(R.string.toolbar_about_msg);
+                break;
         }
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        String message = null;
+
+        switch (item.getItemId()) {
+            case R.id.search:
+                Intent gotoResults = new Intent(SongsResultsActivity.this, DeezerActivity.class);
+                startActivity(gotoResults);
+                break;
+
+            case R.id.instruc:
+                new AlertDialog.Builder(SongsResultsActivity.this)
+                        .setTitle(getResources().getString(R.string.nav_instructions))
+                        .setMessage(getResources().getString(R.string.nav_instruction_message))
+                        .setPositiveButton(android.R.string.no, null)
+                        .show();
+                break;
+            case R.id.aboutAPI:
+                String url = "https://developers.deezer.com/guidelines";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                break;
+            case R.id.donate:
+                AlertDialog.Builder builder = new AlertDialog.Builder(SongsResultsActivity.this);
+                final View customLayout = getLayoutInflater().inflate(R.layout.donate_layout, null);
+                builder.setView(customLayout);
+                builder.setNegativeButton(android.R.string.no, null);
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.show();
+                break;
+        }
+
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
+    }
+
+    class SongQuery extends AsyncTask<String, Integer, String> {
+        Song song;
 
         @Override
-        protected void onPause () {
-            super.onPause();
-        }
+        protected String doInBackground(String... args) {
+            int progress = 0;
+            try {
+                URL url = new URL(args[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.connect();
+                InputStream songListResponse = urlConnection.getInputStream();
 
-        @Override
-        protected void onResume () {
-            super.onResume();
-        }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(songListResponse, "UTF-8"), 8);
+                StringBuilder sb = new StringBuilder();
 
-        @Override
-        protected void onStart () {
-            super.onStart();
-        }
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                String result = sb.toString();
 
+                JSONObject songListing = new JSONObject(result);
 
-        @Override
-        protected void onDestroy () {
-            super.onDestroy();
-        }
+                JSONArray songListJSON = songListing.getJSONArray("data");
 
-        @Override
-        protected void onStop () {
-            super.onStop();
-        }
+                for (int i = 0; i < songListJSON.length(); i++) {
+                    JSONObject songJSON = songListJSON.getJSONObject(i);
+                    String songTitle = songJSON.getString("title");
+                    String duration = songJSON.getString("duration");
+                    JSONObject album = songJSON.getJSONObject("album");
+                    String albumName = album.getString("title");
+                    String albumCover = album.getString("cover_medium");
+                    song = new Song(songTitle, duration, albumName, albumCover, artist.getName());
+                    songList.add(song);
+                    publishProgress(++progress);
+                }
 
-
-        @Override
-        public boolean onCreateOptionsMenu (Menu menu){
-            menu.clear();
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onOptionsItemSelected (MenuItem item){
-            String message = null;
-            switch (item.getItemId()) {
-                case R.id.globe:
-                case R.id.soccer:
-                case R.id.lyric:
-                    message = getResources().getString(R.string.root_toast_message);
-                    break;
-                case R.id.about:
-                    message = getResources().getString(R.string.toolbar_about_msg);
-                    break;
-            }
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-        @Override
-        public boolean onNavigationItemSelected (MenuItem item){
-
-            String message = null;
-
-            switch (item.getItemId()) {
-                case R.id.search:
-                    Intent gotoResults = new Intent(SongsResultsActivity.this, DeezerActivity.class);
-                    startActivity(gotoResults);
-                    break;
-
-                case R.id.instruc:
-                    new AlertDialog.Builder(SongsResultsActivity.this)
-                            .setTitle(getResources().getString(R.string.nav_instructions))
-                            .setMessage(getResources().getString(R.string.nav_instruction_message))
-                            .setPositiveButton(android.R.string.no, null)
-                            .show();
-                    break;
-                case R.id.aboutAPI:
-                    String url = "https://developers.deezer.com/guidelines";
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                    break;
-                case R.id.donate:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SongsResultsActivity.this);
-                    final View customLayout = getLayoutInflater().inflate(R.layout.donate_layout, null);
-                    builder.setView(customLayout);
-                    builder.setNegativeButton(android.R.string.no, null);
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.show();
-                    break;
-            }
-
-            DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return false;
-        }
-
-        class SongQuery extends AsyncTask<String, Integer, String> {
-            Song song;
-
-            @Override
-            protected String doInBackground(String... args) {
-                int progress = 0;
-                try {
-                    URL url = new URL(args[0]);
-                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                for (Song s : songList) {
+                    String imageName = null;
+                    try {
+                        URL u = new URL(s.getAlbumCover());
+                        imageName = u.getFile().split("/")[4];
+                    } catch (MalformedURLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    Bitmap image = null;
+                    url = new URL(s.getAlbumCover());
+                    urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.connect();
-                    InputStream songListResponse = urlConnection.getInputStream();
-
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(songListResponse, "UTF-8"), 8);
-                    StringBuilder sb = new StringBuilder();
-
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
+                    int responseCode = urlConnection.getResponseCode();
+                    if (responseCode == 200) {
+                        image = BitmapFactory.decodeStream(urlConnection.getInputStream());
                     }
-                    String result = sb.toString();
-
-                    JSONObject songListing = new JSONObject(result);
-
-                    JSONArray songListJSON = songListing.getJSONArray("data");
-
-                    for (int i = 0; i < songListJSON.length(); i++) {
-                        JSONObject songJSON = songListJSON.getJSONObject(i);
-                        String songTitle = songJSON.getString("title");
-                        String duration = songJSON.getString("duration");
-                        JSONObject album = songJSON.getJSONObject("album");
-                        String albumName = album.getString("title");
-                        String albumCover = album.getString("cover_medium");
-                        song = new Song(songTitle, duration, albumName, albumCover, artist.getName());
-                        songList.add(song);
-                        publishProgress(++progress);
-                    }
-
-                    for (Song s : songList) {
-                        String imageName = null;
+                    if (fileExistance(imageName)) {
+                        FileInputStream fis = null;
                         try {
-                            URL u = new URL(s.getAlbumCover());
-                            imageName = u.getFile().split("/")[4];
-                        } catch (MalformedURLException e) {
-                            // TODO Auto-generated catch block
+                            fis = openFileInput(imageName);
+                        } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
-                        Bitmap image = null;
-                        url = new URL(s.getAlbumCover());
-                        urlConnection = (HttpURLConnection) url.openConnection();
-                        urlConnection.connect();
-                        int responseCode = urlConnection.getResponseCode();
-                        if (responseCode == 200) {
-                            image = BitmapFactory.decodeStream(urlConnection.getInputStream());
-                        }
-                        if (fileExistance(imageName)) {
-                            FileInputStream fis = null;
-                            try {
-                                fis = openFileInput(imageName);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                            Bitmap bm = BitmapFactory.decodeStream(fis);
-                        } else {
-                            FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
-                            image.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-                            outputStream.flush();
-                            outputStream.close();
-                        }
-                        publishProgress(++progress);
-                        albumPictures.add(image);
+                        Bitmap bm = BitmapFactory.decodeStream(fis);
+                    } else {
+                        FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
+                        image.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+                        outputStream.flush();
+                        outputStream.close();
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    publishProgress(++progress);
+                    albumPictures.add(image);
                 }
-                publishProgress(100);
-                return "Done";
-            }
 
-            public boolean fileExistance(String fname) {
-                File file = getBaseContext().getFileStreamPath(fname);
-                return file.exists();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            public void onProgressUpdate(Integer... args) {
-                progressBar.setProgress(args[0]);
-            }
-
-            public void onPostExecute(String fromDoInBackground) {
-                //this.cancel(true);
-                progressBar.setVisibility(View.INVISIBLE);
-                myAdapter.notifyDataSetChanged();
-
-            }
+            publishProgress(100);
+            return "Done";
         }
 
-        private class SongListAdapter extends BaseAdapter {
+        public boolean fileExistance(String fname) {
+            File file = getBaseContext().getFileStreamPath(fname);
+            return file.exists();
+        }
 
-            public int getCount() {
-                return songList.size();
-            }
+        public void onProgressUpdate(Integer... args) {
+            progressBar.setProgress(args[0]);
+        }
 
-            public Object getItem(int position) {
-                return songList.get(position);
-            }
+        public void onPostExecute(String fromDoInBackground) {
+            //this.cancel(true);
+            progressBar.setVisibility(View.INVISIBLE);
+            myAdapter.notifyDataSetChanged();
 
-            public long getItemId(int position) {
-                return position;
-            }
-
-            public View getView(int position, View old, ViewGroup parent) {
-                LayoutInflater inflater = getLayoutInflater();
-                View newView;
-                TextView tView;
-                newView = inflater.inflate(R.layout.row_layout, parent, false);
-                tView = newView.findViewById(R.id.rowText);
-                tView.setText(getItem(position).toString());
-                ImageView iView;
-                iView = newView.findViewById(R.id.rowImage);
-                iView.setImageBitmap(albumPictures.get(position));
-                return newView;
-            }
         }
     }
+
+    private class SongListAdapter extends BaseAdapter {
+
+        public int getCount() {
+            return songList.size();
+        }
+
+        public Object getItem(int position) {
+            return songList.get(position);
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View old, ViewGroup parent) {
+            LayoutInflater inflater = getLayoutInflater();
+            View newView;
+            TextView tView;
+            newView = inflater.inflate(R.layout.row_layout, parent, false);
+            tView = newView.findViewById(R.id.rowText);
+            tView.setText(getItem(position).toString());
+            ImageView iView;
+            iView = newView.findViewById(R.id.rowImage);
+            iView.setImageBitmap(albumPictures.get(position));
+            return newView;
+        }
+    }
+}

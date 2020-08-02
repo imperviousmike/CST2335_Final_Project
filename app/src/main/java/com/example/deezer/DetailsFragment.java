@@ -49,6 +49,7 @@ public class DetailsFragment extends Fragment {
         Button finishButton = (Button) result.findViewById(R.id.finishButton);
         finishButton.setOnClickListener(clk -> {
             parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
+            getActivity().finish();
         });
 
         return result;
