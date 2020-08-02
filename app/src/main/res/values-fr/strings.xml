@@ -26,4 +26,6 @@
     <string name="nav_search">Chercher</string>
     <string name="nav_header_deezer">Deezer</string>
     <string name="nav_header_app">Application</string>
+    <string name="search_hint">Tapez un nom d\'artiste et recherchez</string>
+    <string name="search_previous">Recherche précédente</string>
 </resources>

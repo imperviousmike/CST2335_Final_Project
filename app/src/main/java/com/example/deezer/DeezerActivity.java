@@ -1,12 +1,17 @@
 package com.example.deezer;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,10 +24,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.root.R;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
+
 
 public class DeezerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
+    private final static String SEARCH_KEY = "PreviousSearch";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +44,22 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        SharedPreferences prefs = this.getSharedPreferences(
+                "com.example.deezer", Context.MODE_PRIVATE);
+        String previousSearch = prefs.getString(SEARCH_KEY, "");
+        TextView text = findViewById(R.id.previous_search);
+        text.setText(previousSearch);
+
+        Button searchButton = findViewById(R.id.searchButton);
+
+        searchButton.setOnClickListener(click ->
+        {
+            Intent gotoResults = new Intent(DeezerActivity.this, SearchResultsActivity.class);
+            EditText search = findViewById(R.id.searchText);
+            gotoResults.putExtra("search", search.getText().toString());
+            startActivity(gotoResults);
+        });
 
     }
 
@@ -76,6 +97,11 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
         String message = null;
 
         switch (item.getItemId()) {
+            case R.id.search:
+                Intent gotoResults = new Intent(DeezerActivity.this, DeezerActivity.class);
+                startActivity(gotoResults);
+                break;
+
             case R.id.instruc:
                 new AlertDialog.Builder(DeezerActivity.this)
                         .setTitle(getResources().getString(R.string.nav_instructions))
@@ -102,6 +128,44 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences prefs = this.getSharedPreferences(
+                "com.example.deezer", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        EditText search = findViewById(R.id.searchText);
+        edit.putString(SEARCH_KEY, search.getText().toString());
+        edit.commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
 }
