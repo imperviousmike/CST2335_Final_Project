@@ -73,8 +73,8 @@ public class Song implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return String.format("Title: %s \n Artist: %s \n Duration: %s \n Album Name: %s", getTitle(), getArtist(), getDuration(), getAlbumCover());
+    public String toString(){
+       return String.format("Title: %s \n Artist: %s", getTitle(), getArtist());
     }
 
 

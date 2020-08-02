@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="com.example.deezer.EmptyActivity" />
         <activity android:name="com.example.deezer.SongsResultsActivity" />
         <activity android:name="com.example.deezer.SearchResultsActivity" />
         <activity android:name="com.example.deezer.DeezerActivity" />

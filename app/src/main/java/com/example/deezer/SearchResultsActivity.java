@@ -227,7 +227,7 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                             eventType = xpp.next();
                             if (eventType == XmlPullParser.TEXT)
                                 artist.setName(xpp.getText());
-                        } else if (xpp.getName().equals("picture_small")) {
+                        } else if (xpp.getName().equals("picture_medium")) {
                             eventType = xpp.next();
                             if (eventType == XmlPullParser.TEXT)
                                 artist.setPicture(xpp.getText());
