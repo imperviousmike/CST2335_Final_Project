@@ -38,6 +38,16 @@
                 android:text="@string/results_title"
                 android:textSize="32dp" />
 
+            <TextView
+                android:id="@+id/notFound"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:layout_below="@id/resultsTitle"
+                android:text="@string/results_notfound"
+                android:textSize="24dp" />
+
             <ListView
                 android:id="@+id/results"
                 android:layout_width="fill_parent"

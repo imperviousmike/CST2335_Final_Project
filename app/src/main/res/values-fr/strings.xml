@@ -34,4 +34,7 @@
     <string name="favourite_addheader">Ajouter aux Favoris?</string>
     <string name="favourite_addmsg">Ajouter</string>
     <string name="favourite_addender">aux favoris?</string>
+    <string name="results_notfound">Aucun résultat trouvé, veuillez retourner et vérifier votre terme de recherche</string>
+    <string name="favourite_header">Vos favoris</string>
+    <string name="favourite_exists">Cette chanson a déjà été ajoutée aux favoris!</string>
 </resources>
