@@ -51,6 +51,13 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
         TextView text = findViewById(R.id.previous_search);
         text.setText(previousSearch);
 
+        text.setOnClickListener(click -> {
+            Intent gotoResults = new Intent(DeezerActivity.this, SearchResultsActivity.class);
+            EditText search = findViewById(R.id.searchText);
+            gotoResults.putExtra("search", text.getText().toString().replaceAll(" ", "_"));
+            startActivity(gotoResults);
+        });
+
         Button searchButton = findViewById(R.id.searchButton);
 
         searchButton.setOnClickListener(click ->
