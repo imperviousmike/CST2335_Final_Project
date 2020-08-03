@@ -18,7 +18,7 @@
     <string name="nav_donate">Donate to Project</string>
     <string name="toolbar_about">About this project</string>
     <string name="nav_instruction_message">Search for an artist to get a list of songs. If you want to track a song select it with a long hold and add to your favorites. To remove it, head to the favorites section and do the same action.</string>
-    <string name="toolbar_about_msg">his is the Deezer activity, written by Michael Daly</string>
+    <string name="toolbar_about_msg">This is the Deezer activity, written by Michael Daly</string>
     <string name="nav_donate_msg">How much money do you want to donate?</string>
     <string name="nav_donate_hint">$$$$</string>
     <string name="nav_favorite">Favorites</string>
