@@ -118,24 +118,35 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
                             .commit();
                 } else {
                     Intent nextActivity = new Intent(SongsResultsActivity.this, EmptyActivity.class);
-                    nextActivity.putExtras(dataToPass); //send data to next activity
-                    startActivity(nextActivity); //make the transition
+                    nextActivity.putExtras(dataToPass);
+                    startActivity(nextActivity);
                 }
             }
         });
 
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                new AlertDialog.Builder(SongsResultsActivity.this)
-                        .setTitle(getResources().getString(R.string.favourite_addheader))
-                        .setMessage(getResources().getString(R.string.favourite_addmsg) + " " + songList.get(position).getTitle() + " " + getResources().getString(R.string.favourite_addender))
-                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                            songDB.addSong(songList.get(position));
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .show();
+                if (!favList.contains(songList.get(position))) {
+                    new AlertDialog.Builder(SongsResultsActivity.this)
+                            .setTitle(getResources().getString(R.string.favourite_addheader))
+                            .setMessage(getResources().getString(R.string.favourite_addmsg) + " " + songList.get(position).getTitle() + " " + getResources().getString(R.string.favourite_addender))
+                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                                songDB.addSong(songList.get(position));
+                                favList = songDB.getAll();
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .show();
+
+                } else {
+                    new AlertDialog.Builder(SongsResultsActivity.this)
+                            .setTitle(getResources().getString(R.string.favourite_addheader))
+                            .setMessage(getResources().getString(R.string.favourite_exists))
+                            .setPositiveButton(android.R.string.yes, null)
+                            .show();
+                }
                 return true;
             }
+
         });
 
 
@@ -328,6 +339,10 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
         public void onPostExecute(String fromDoInBackground) {
             //this.cancel(true);
             progressBar.setVisibility(View.INVISIBLE);
+            if (songList.isEmpty()) {
+                TextView text = findViewById(R.id.notFound);
+                text.setVisibility(View.VISIBLE);
+            }
             myAdapter.notifyDataSetChanged();
 
         }
