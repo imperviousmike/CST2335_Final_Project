@@ -12,7 +12,7 @@ import com.example.deezer.members.Song;
 import java.util.ArrayList;
 import java.util.List;
 
-public class favSongDB extends SQLiteOpenHelper {
+public class FavSongDB extends SQLiteOpenHelper {
 
     protected final static String DATABASE_NAME = "favSongDB";
     protected final static int VERSION_NUM = 1;
@@ -25,7 +25,7 @@ public class favSongDB extends SQLiteOpenHelper {
     public final static String COL_ID = "_id";
     public final String[] columns = {COL_ID, COL_TITLE, COL_DURATION, COL_ALBUMNAME, COL_ALBUMCOVER, COL_ARTIST};
 
-    public favSongDB(Context ctx) {
+    public FavSongDB(Context ctx) {
         super(ctx, DATABASE_NAME, null, VERSION_NUM);
     }
 

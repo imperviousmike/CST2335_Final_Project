@@ -28,4 +28,9 @@
     <string name="search_hint">Type an artist name and search</string>
     <string name="search_previous">Previous Search</string>
     <string name="results_title">Search Results</string>
+    <string name="favourite_deleteheader">Remove Favourite?</string>
+    <string name="favourite_deletemsg">Remove</string>
+    <string name="favourite_addheader">Add to Favourites?</string>
+    <string name="favourite_addmsg">Add</string>
+    <string name="favourite_addender">to favourites?</string>
 </resources>

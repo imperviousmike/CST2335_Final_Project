@@ -29,4 +29,9 @@
     <string name="search_hint">Tapez un nom d\'artiste et recherchez</string>
     <string name="search_previous">Recherche précédente</string>
     <string name="results_title">Résultats de recherche</string>
+    <string name="favourite_deleteheader">Supprimer le favori?</string>
+    <string name="favourite_deletemsg">Retirer</string>
+    <string name="favourite_addheader">Ajouter aux Favoris?</string>
+    <string name="favourite_addmsg">Ajouter</string>
+    <string name="favourite_addender">aux favoris?</string>
 </resources>

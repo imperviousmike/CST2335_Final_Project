@@ -25,9 +25,9 @@ import com.example.root.R;
 import com.google.android.material.navigation.NavigationView;
 
 
-
 public class DeezerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final static String SEARCH_KEY = "PreviousSearch";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +57,7 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
         {
             Intent gotoResults = new Intent(DeezerActivity.this, SearchResultsActivity.class);
             EditText search = findViewById(R.id.searchText);
-            gotoResults.putExtra("search", search.getText().toString());
+            gotoResults.putExtra("search", search.getText().toString().replaceAll(" ", "_"));
             startActivity(gotoResults);
         });
 
@@ -100,6 +100,11 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
             case R.id.search:
                 Intent gotoResults = new Intent(DeezerActivity.this, DeezerActivity.class);
                 startActivity(gotoResults);
+                break;
+
+            case R.id.fav:
+                Intent gotoFav = new Intent(DeezerActivity.this, FavouriteActivity.class);
+                startActivity(gotoFav);
                 break;
 
             case R.id.instruc:

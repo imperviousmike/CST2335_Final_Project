@@ -92,7 +92,7 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent gotoResults = new Intent(SearchResultsActivity.this, SongsResultsActivity.class);
                 EditText search = findViewById(R.id.searchText);
-                gotoResults.putExtra("artist",artistList.get(position));
+                gotoResults.putExtra("artist", artistList.get(position));
                 startActivity(gotoResults);
             }
         });
@@ -136,6 +136,11 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
             case R.id.search:
                 Intent gotoResults = new Intent(SearchResultsActivity.this, DeezerActivity.class);
                 startActivity(gotoResults);
+                break;
+
+            case R.id.fav:
+                Intent gotoFav = new Intent(SearchResultsActivity.this, FavouriteActivity.class);
+                startActivity(gotoFav);
                 break;
 
             case R.id.instruc:
@@ -242,37 +247,40 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                     eventType = xpp.next(); //move to the next xml event and store it in a variable
                 }
 
-            for(Artist a : artistList){
-                String imageName = null;
-                try {
-                    URL u = new URL(a.getPicture());
-                    imageName = u.getFile().split("/")[4];
-                } catch (MalformedURLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                for (Artist a : artistList) {
+                    String imageName = null;
+                    try {
+                        URL u = new URL(a.getPicture());
+                        imageName = u.getFile().split("/")[4];
+                    } catch (MalformedURLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    Bitmap image = null;
+                    url = new URL(a.getPicture());
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.connect();
+                    int responseCode = urlConnection.getResponseCode();
+                    if (responseCode == 200) {
+                        image = BitmapFactory.decodeStream(urlConnection.getInputStream());
+                    }
+                    if (fileExistance(imageName)) {
+                        FileInputStream fis = null;
+                        try {
+                            fis = openFileInput(imageName);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        Bitmap bm = BitmapFactory.decodeStream(fis);
+                    } else {
+                        FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
+                        image.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
+                        outputStream.flush();
+                        outputStream.close();
+                    }
+                    publishProgress(++progress);
+                    artistPictures.add(image);
                 }
-                Bitmap image = null;
-                url = new URL(a.getPicture());
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.connect();
-                int responseCode = urlConnection.getResponseCode();
-                if (responseCode == 200) {
-                    image = BitmapFactory.decodeStream(urlConnection.getInputStream());
-                }
-                if (fileExistance(imageName)) {
-                    FileInputStream fis = null;
-                    try {    fis = openFileInput(imageName);   }
-                    catch (FileNotFoundException e) {    e.printStackTrace();  }
-                    Bitmap bm = BitmapFactory.decodeStream(fis);
-                } else {
-                    FileOutputStream outputStream = openFileOutput( imageName, Context.MODE_PRIVATE);
-                    image.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-                    outputStream.flush();
-                    outputStream.close();
-                }
-                publishProgress(++progress);
-                artistPictures.add(image);
-            }
 
             } catch (Exception e) {
                 e.printStackTrace();
