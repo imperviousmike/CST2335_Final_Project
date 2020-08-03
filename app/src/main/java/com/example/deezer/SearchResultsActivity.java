@@ -125,8 +125,6 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
         return true;
     }
 
-
-    // Needed for the OnNavigationItemSelected interface:
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -174,8 +172,8 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
     }
+
 
     @Override
     protected void onPause() {
@@ -244,7 +242,7 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                             publishProgress(++progress);
                         }
                     }
-                    eventType = xpp.next(); //move to the next xml event and store it in a variable
+                    eventType = xpp.next();
                 }
 
                 for (Artist a : artistList) {
@@ -301,7 +299,12 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
         public void onPostExecute(String fromDoInBackground) {
             //this.cancel(true);
             progressBar.setVisibility(View.INVISIBLE);
+            if (artistList.isEmpty()) {
+                TextView text = findViewById(R.id.notFound);
+                text.setVisibility(View.VISIBLE);
+            }
             myAdapter.notifyDataSetChanged();
+
 
         }
     }
