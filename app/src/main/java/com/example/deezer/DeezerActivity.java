@@ -53,7 +53,6 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
 
         text.setOnClickListener(click -> {
             Intent gotoResults = new Intent(DeezerActivity.this, SearchResultsActivity.class);
-            EditText search = findViewById(R.id.searchText);
             gotoResults.putExtra("search", text.getText().toString().replaceAll(" ", "_"));
             startActivity(gotoResults);
         });
@@ -96,12 +95,8 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
         return true;
     }
 
-
-    // Needed for the OnNavigationItemSelected interface:
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
-        String message = null;
 
         switch (item.getItemId()) {
             case R.id.search:
