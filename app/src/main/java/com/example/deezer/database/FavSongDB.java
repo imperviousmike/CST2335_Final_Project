@@ -48,20 +48,12 @@ public class FavSongDB extends SQLiteOpenHelper {
         values.put(COL_ALBUMNAME, song.getAlbumName());
         values.put(COL_ALBUMCOVER, song.getAlbumCover());
         values.put(COL_ARTIST, song.getArtist());
-        if (db.insert(TABLE_NAME, null, values) > 0) {
-            return true;
-        }
-        return false;
+        return db.insert(TABLE_NAME, null, values) > 0;
     }
-
 
     public boolean deleteMessage(Song song) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        if (db.delete(TABLE_NAME, COL_ID + "=" + song.getId(), null) > 0) {
-            return true;
-        }
-        return false;
+        return db.delete(TABLE_NAME, COL_ID + "=" + song.getId(), null) > 0;
     }
 
     public List<Song> getAll() {
