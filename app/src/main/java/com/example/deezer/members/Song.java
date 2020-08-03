@@ -15,12 +15,7 @@ public class Song implements Serializable {
     public static final long serialVersionUID = 1L;
 
     public Song(String title, String duration, String albumName, String albumCover, String artist) {
-        this.title = title;
-        this.duration = duration;
-        this.albumName = albumName;
-        this.albumCover = albumCover;
-        this.artist = artist;
-        id = 0;
+        this(0,title,duration,albumName,albumCover,artist);
     }
 
     public Song(int id, String title, String duration, String albumName, String albumCover, String artist) {
