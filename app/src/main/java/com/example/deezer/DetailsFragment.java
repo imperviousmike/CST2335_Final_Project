@@ -20,14 +20,12 @@ import com.example.root.R;
 
 public class DetailsFragment extends Fragment {
 
-    private Bundle dataFromActivity;
-    private long id;
     private AppCompatActivity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        dataFromActivity = getArguments();
+        Bundle dataFromActivity = getArguments();
         Song song = (Song) dataFromActivity.getSerializable("song");
         View result = inflater.inflate(R.layout.activity_details_fragment, container, false);
 
