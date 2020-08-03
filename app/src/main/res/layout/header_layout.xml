@@ -7,22 +7,26 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:src="@drawable/android"
         android:layout_alignParentBottom="true" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/nav_header"
         android:layout_alignParentBottom="true" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/nav_author"
         android:layout_alignParentBottom="true" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/nav_version"
         android:layout_alignParentBottom="true" />
 </LinearLayout>
