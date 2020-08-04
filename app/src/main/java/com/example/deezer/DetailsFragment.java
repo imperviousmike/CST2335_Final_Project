@@ -44,7 +44,7 @@ public class DetailsFragment extends Fragment {
         TextView artist = result.findViewById(R.id.songArtist);
         artist.setText(song.getArtist());
 
-        Button finishButton = (Button) result.findViewById(R.id.finishButton);
+        Button finishButton = result.findViewById(R.id.finishButton);
         finishButton.setOnClickListener(clk -> {
             parentActivity.getSupportFragmentManager().beginTransaction().remove(this).commit();
             getActivity().finish();

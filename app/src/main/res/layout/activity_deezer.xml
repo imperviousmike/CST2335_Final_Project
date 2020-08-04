@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/insert"
                 android:drawableRight="@drawable/search"
-                android:hint="@string/deezer_searchTitle"/>
+                android:hint="@string/deezer_searchTitle" />
 
             <Button
                 android:id="@+id/searchButton"
@@ -45,16 +45,16 @@
                 android:layout_below="@id/searchText"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="@string/deezer_searchTitle"/>
+                android:text="@string/deezer_searchTitle" />
 
             <TextView
                 android:id="@+id/previous_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="100dp"
-                android:gravity="center"
                 android:layout_below="@id/searchButton"
                 android:layout_centerInParent="true"
+                android:gravity="center"
+                android:paddingTop="100dp"
                 android:text="@string/search_previous"
                 android:textSize="32dp" />
 
@@ -62,8 +62,8 @@
                 android:id="@+id/previous_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_below="@id/previous_title"
+                android:gravity="center"
                 android:textSize="25dp" />
         </RelativeLayout>
 

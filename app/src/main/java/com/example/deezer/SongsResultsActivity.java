@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,21 +32,19 @@ import com.example.deezer.members.Artist;
 import com.example.deezer.members.Song;
 import com.example.root.R;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,17 +53,17 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
     private List<Song> songList;
     private List<Bitmap> albumPictures;
     private List<Song> favList;
-    private SongListAdapter myAdapter;
     private ProgressBar progressBar;
     private FavSongDB songDB;
     private Artist artist;
     private DetailsFragment dFragment;
+    private boolean isTablet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songs_results);
-        boolean isTablet = findViewById(R.id.frame) != null;
+        isTablet = findViewById(R.id.frame) != null;
         songList = new ArrayList<>();
         albumPictures = new ArrayList<>();
 
@@ -77,14 +74,12 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
         Intent fromSearch = getIntent();
         artist = (Artist) fromSearch.getSerializableExtra("artist");
 
-        Toolbar tBar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar tBar = findViewById(R.id.toolbar);
         setSupportActionBar(tBar);
 
         progressBar = findViewById(R.id.songProgress);
         progressBar.setVisibility(View.VISIBLE);
 
-        ListView list = findViewById(R.id.songs);
-        list.setAdapter(myAdapter = new SongListAdapter());
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
@@ -96,59 +91,10 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
         navigationView.setNavigationItemSelectedListener(this);
 
         TextView title = findViewById(R.id.songTitle);
-        title.setText(artist.getName() + "'s Songs");
+        title.setText(String.format("%s's Songs", artist.getName()));
 
         SongQuery req = new SongQuery();
         req.execute(artist.getSongs());
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle dataToPass = new Bundle();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                dataToPass.putSerializable("song", songList.get(position));
-                dataToPass.putParcelable("cover", albumPictures.get(position));
-
-                if (isTablet) {
-                    dFragment = new DetailsFragment();
-                    dFragment.setArguments(dataToPass);
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.frame, dFragment)
-                            .commit();
-                } else {
-                    Intent nextActivity = new Intent(SongsResultsActivity.this, EmptyActivity.class);
-                    nextActivity.putExtras(dataToPass);
-                    startActivity(nextActivity);
-                }
-            }
-        });
-
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!favList.contains(songList.get(position))) {
-                    new AlertDialog.Builder(SongsResultsActivity.this)
-                            .setTitle(getResources().getString(R.string.favourite_addheader))
-                            .setMessage(getResources().getString(R.string.favourite_addmsg) + " " + songList.get(position).getTitle() + " " + getResources().getString(R.string.favourite_addender))
-                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                                songDB.addSong(songList.get(position));
-                                favList = songDB.getAll();
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
-
-                } else {
-                    new AlertDialog.Builder(SongsResultsActivity.this)
-                            .setTitle(getResources().getString(R.string.favourite_addheader))
-                            .setMessage(getResources().getString(R.string.favourite_exists))
-                            .setPositiveButton(android.R.string.yes, null)
-                            .show();
-                }
-                return true;
-            }
-
-        });
-
 
     }
 
@@ -206,9 +152,6 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
-        String message = null;
-
         switch (item.getItemId()) {
             case R.id.search:
                 Intent gotoResults = new Intent(SongsResultsActivity.this, DeezerActivity.class);
@@ -260,12 +203,12 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
                 urlConnection.connect();
                 InputStream songListResponse = urlConnection.getInputStream();
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(songListResponse, "UTF-8"), 8);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(songListResponse, StandardCharsets.UTF_8), 8);
                 StringBuilder sb = new StringBuilder();
 
-                String line = null;
+                String line;
                 while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
+                    sb.append(line).append("\n");
                 }
                 String result = sb.toString();
 
@@ -302,20 +245,14 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
                     if (responseCode == 200) {
                         image = BitmapFactory.decodeStream(urlConnection.getInputStream());
                     }
-                    if (fileExistance(imageName)) {
-                        FileInputStream fis = null;
-                        try {
-                            fis = openFileInput(imageName);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        Bitmap bm = BitmapFactory.decodeStream(fis);
-                    } else {
-                        FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
+
+                    FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
+                    if (image != null) {
                         image.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-                        outputStream.flush();
-                        outputStream.close();
                     }
+                    outputStream.flush();
+                    outputStream.close();
+
                     publishProgress(++progress);
                     albumPictures.add(image);
                 }
@@ -325,11 +262,6 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
             }
             publishProgress(100);
             return "Done";
-        }
-
-        public boolean fileExistance(String fname) {
-            File file = getBaseContext().getFileStreamPath(fname);
-            return file.exists();
         }
 
         public void onProgressUpdate(Integer... args) {
@@ -343,7 +275,53 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
                 TextView text = findViewById(R.id.notFound);
                 text.setVisibility(View.VISIBLE);
             }
-            myAdapter.notifyDataSetChanged();
+            ListView list = findViewById(R.id.songs);
+            list.setAdapter(new SongListAdapter());
+
+            list.setOnItemClickListener((parent, view, position, id) -> {
+                Bundle dataToPass = new Bundle();
+                dataToPass.putSerializable("song", songList.get(position));
+                dataToPass.putParcelable("cover", albumPictures.get(position));
+
+                if (isTablet) {
+                    dFragment = new DetailsFragment();
+                    dFragment.setArguments(dataToPass);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frame, dFragment)
+                            .commit();
+                } else {
+                    Intent nextActivity = new Intent(SongsResultsActivity.this, EmptyActivity.class);
+                    nextActivity.putExtras(dataToPass);
+                    startActivity(nextActivity);
+                }
+            });
+
+            list.setOnItemLongClickListener((parent, view, position, id) -> {
+                if (!favList.contains(songList.get(position))) {
+                    new AlertDialog.Builder(SongsResultsActivity.this)
+                            .setTitle(getResources().getString(R.string.favourite_addheader))
+                            .setMessage(getResources().getString(R.string.favourite_addmsg) + " " + songList.get(position).getTitle() + " " + getResources().getString(R.string.favourite_addender))
+                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                                if (songDB.addSong(songList.get(position))) {
+                                    Snackbar.make(list, R.string.favourite_addsuccess, Snackbar.LENGTH_SHORT)
+                                            .show();
+                                }
+                                favList = songDB.getAll();
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .show();
+
+                } else {
+                    new AlertDialog.Builder(SongsResultsActivity.this)
+                            .setTitle(getResources().getString(R.string.favourite_addheader))
+                            .setMessage(getResources().getString(R.string.favourite_exists))
+                            .setPositiveButton(android.R.string.yes, null)
+                            .show();
+                }
+                return true;
+            });
+
 
         }
     }

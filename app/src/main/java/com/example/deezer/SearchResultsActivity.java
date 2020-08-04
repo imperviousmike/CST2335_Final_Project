@@ -13,9 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -36,9 +34,6 @@ import com.google.android.material.navigation.NavigationView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -50,7 +45,6 @@ import java.util.List;
 public class SearchResultsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private List<Artist> artistList;
     private List<Bitmap> artistPictures;
-    private ArtistListAdapter myAdapter;
     private ProgressBar progressBar;
 
 
@@ -65,11 +59,8 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
         String search = fromDeezer.getStringExtra("search");
         String url = String.format("https://api.deezer.com/search/artist/?q=%s&output=xml", search);
 
-        Toolbar tBar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar tBar = findViewById(R.id.toolbar);
         setSupportActionBar(tBar);
-
-        ListView list = findViewById(R.id.results);
-        list.setAdapter(myAdapter = new ArtistListAdapter());
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
@@ -86,17 +77,6 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
 
         ArtistQuery req = new ArtistQuery();
         req.execute(url);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent gotoResults = new Intent(SearchResultsActivity.this, SongsResultsActivity.class);
-                EditText search = findViewById(R.id.searchText);
-                gotoResults.putExtra("artist", artistList.get(position));
-                startActivity(gotoResults);
-            }
-        });
-
 
     }
 
@@ -127,9 +107,6 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
-        String message = null;
-
         switch (item.getItemId()) {
             case R.id.search:
                 Intent gotoResults = new Intent(SearchResultsActivity.this, DeezerActivity.class);
@@ -190,7 +167,6 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
         super.onStart();
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -216,30 +192,33 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                 XmlPullParser xpp = factory.newPullParser();
                 xpp.setInput(response, "UTF-8");
 
-                String iconName = null;
-
                 int eventType = xpp.getEventType();
 
                 while (eventType != XmlPullParser.END_DOCUMENT) {
 
                     if (eventType == XmlPullParser.START_TAG) {
-                        //If you get here, then you are pointing at a start tag
-                        if (xpp.getName().equals("artist")) {
-                            artist = new Artist();
-                        } else if (xpp.getName().equals("name")) {
-                            eventType = xpp.next();
-                            if (eventType == XmlPullParser.TEXT)
-                                artist.setName(xpp.getText());
-                        } else if (xpp.getName().equals("picture_medium")) {
-                            eventType = xpp.next();
-                            if (eventType == XmlPullParser.TEXT)
-                                artist.setPicture(xpp.getText());
-                        } else if (xpp.getName().equals("tracklist")) {
-                            eventType = xpp.next();
-                            if (eventType == XmlPullParser.TEXT)
-                                artist.setSongs(xpp.getText());
-                            artistList.add(artist);
-                            publishProgress(++progress);
+
+                        switch (xpp.getName()) {
+                            case "artist":
+                                artist = new Artist();
+                                break;
+                            case "name":
+                                eventType = xpp.next();
+                                if (eventType == XmlPullParser.TEXT)
+                                    artist.setName(xpp.getText());
+                                break;
+                            case "picture_medium":
+                                eventType = xpp.next();
+                                if (eventType == XmlPullParser.TEXT)
+                                    artist.setPicture(xpp.getText());
+                                break;
+                            case "tracklist":
+                                eventType = xpp.next();
+                                if (eventType == XmlPullParser.TEXT)
+                                    artist.setSongs(xpp.getText());
+                                artistList.add(artist);
+                                publishProgress((progress + 5));
+                                break;
                         }
                     }
                     eventType = xpp.next();
@@ -251,7 +230,6 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                         URL u = new URL(a.getPicture());
                         imageName = u.getFile().split("/")[4];
                     } catch (MalformedURLException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                     Bitmap image = null;
@@ -262,20 +240,12 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                     if (responseCode == 200) {
                         image = BitmapFactory.decodeStream(urlConnection.getInputStream());
                     }
-                    if (fileExistance(imageName)) {
-                        FileInputStream fis = null;
-                        try {
-                            fis = openFileInput(imageName);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        Bitmap bm = BitmapFactory.decodeStream(fis);
-                    } else {
-                        FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
+                    FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
+                    if (image != null) {
                         image.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-                        outputStream.flush();
-                        outputStream.close();
                     }
+                    outputStream.flush();
+                    outputStream.close();
                     publishProgress(++progress);
                     artistPictures.add(image);
                 }
@@ -287,23 +257,25 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
             return "Done";
         }
 
-        public boolean fileExistance(String fname) {
-            File file = getBaseContext().getFileStreamPath(fname);
-            return file.exists();
-        }
-
         public void onProgressUpdate(Integer... args) {
             progressBar.setProgress(args[0]);
         }
 
         public void onPostExecute(String fromDoInBackground) {
-            //this.cancel(true);
             progressBar.setVisibility(View.INVISIBLE);
             if (artistList.isEmpty()) {
                 TextView text = findViewById(R.id.notFound);
                 text.setVisibility(View.VISIBLE);
             }
-            myAdapter.notifyDataSetChanged();
+
+            ListView list = findViewById(R.id.results);
+            list.setAdapter(new ArtistListAdapter());
+
+            list.setOnItemClickListener((parent, view, position, id) -> {
+                Intent gotoResults = new Intent(SearchResultsActivity.this, SongsResultsActivity.class);
+                gotoResults.putExtra("artist", artistList.get(position));
+                startActivity(gotoResults);
+            });
 
 
         }

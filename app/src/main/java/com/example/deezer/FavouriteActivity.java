@@ -1,12 +1,5 @@
 package com.example.deezer;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,21 +20,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.example.deezer.database.FavSongDB;
-import com.example.deezer.members.Artist;
 import com.example.deezer.members.Song;
 import com.example.root.R;
 import com.google.android.material.navigation.NavigationView;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -266,7 +262,11 @@ public class FavouriteActivity extends AppCompatActivity implements NavigationVi
                             .setTitle(getResources().getString(R.string.favourite_deleteheader))
                             .setMessage(getResources().getString(R.string.favourite_deletemsg) + " " + songList.get(position).getTitle() + "?")
                             .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                                songDB.deleteMessage(songList.get(position));
+                                if(songDB.deleteMessage(songList.get(position))){
+                                    Snackbar.make(list, R.string.favourite_deletesuccess, Snackbar.LENGTH_SHORT)
+                                            .show();
+                                }
+                                coverList.remove(position);
                                 songList = songDB.getAll();
                                 adapter.notifyDataSetChanged();
                             })

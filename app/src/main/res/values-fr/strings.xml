@@ -37,4 +37,6 @@
     <string name="results_notfound">Aucun résultat trouvé, veuillez retourner et vérifier votre terme de recherche</string>
     <string name="favourite_header">Vos favoris</string>
     <string name="favourite_exists">Cette chanson a déjà été ajoutée aux favoris!</string>
+    <string name="favourite_addsuccess">Ajouté avec succès aux favoris</string>
+    <string name="favourite_deletesuccess">Suppression réussie des favoris</string>
 </resources>

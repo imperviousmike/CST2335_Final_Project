@@ -69,7 +69,6 @@ public class FavSongDB extends SQLiteOpenHelper {
         return songList;
     }
 
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onCreate(db);

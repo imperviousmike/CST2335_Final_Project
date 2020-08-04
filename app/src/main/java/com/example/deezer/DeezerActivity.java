@@ -33,7 +33,7 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deezer);
 
-        Toolbar tBar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar tBar = findViewById(R.id.toolbar);
         setSupportActionBar(tBar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
