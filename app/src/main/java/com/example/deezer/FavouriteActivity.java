@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,10 +32,6 @@ import com.example.root.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -67,7 +62,7 @@ public class FavouriteActivity extends AppCompatActivity implements NavigationVi
         SongQuery req = new FavouriteActivity.SongQuery();
         req.execute();
 
-        Toolbar tBar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar tBar = findViewById(R.id.toolbar);
         setSupportActionBar(tBar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -79,11 +74,6 @@ public class FavouriteActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-    }
-
-    public boolean fileExistance(String fname) {
-        File file = getBaseContext().getFileStreamPath(fname);
-        return file.exists();
     }
 
     @Override
@@ -111,13 +101,8 @@ public class FavouriteActivity extends AppCompatActivity implements NavigationVi
         return true;
     }
 
-
-    // Needed for the OnNavigationItemSelected interface:
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
-        String message = null;
-
         switch (item.getItemId()) {
             case R.id.search:
                 Intent gotoResults = new Intent(FavouriteActivity.this, DeezerActivity.class);
@@ -194,7 +179,6 @@ public class FavouriteActivity extends AppCompatActivity implements NavigationVi
                     URL u = new URL(s.getAlbumCover());
                     imageName = u.getFile().split("/")[4];
                 } catch (MalformedURLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 try {
@@ -206,20 +190,13 @@ public class FavouriteActivity extends AppCompatActivity implements NavigationVi
                     if (responseCode == 200) {
                         image = BitmapFactory.decodeStream(urlConnection.getInputStream());
                     }
-                    if (fileExistance(imageName)) {
-                        FileInputStream fis = null;
-                        try {
-                            fis = openFileInput(imageName);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        Bitmap bm = BitmapFactory.decodeStream(fis);
-                    } else {
-                        FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
+                    FileOutputStream outputStream = openFileOutput(imageName, Context.MODE_PRIVATE);
+                    if (image != null) {
                         image.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-                        outputStream.flush();
-                        outputStream.close();
                     }
+                    outputStream.flush();
+                    outputStream.close();
+
                     coverList.add(image);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -233,47 +210,41 @@ public class FavouriteActivity extends AppCompatActivity implements NavigationVi
             list = findViewById(R.id.favSongs);
             list.setAdapter(adapter = new FavouriteAdapter());
 
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            list.setOnItemClickListener((parent, view, position, id) -> {
+                Bundle dataToPass = new Bundle();
+                dataToPass.putSerializable("song", songList.get(position));
+                dataToPass.putParcelable("cover", coverList.get(position));
 
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Bundle dataToPass = new Bundle();
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    dataToPass.putSerializable("song", songList.get(position));
-                    dataToPass.putParcelable("cover", coverList.get(position));
-
-                    if (isTablet) {
-                        dFragment = new DetailsFragment();
-                        dFragment.setArguments(dataToPass);
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.frame, dFragment)
-                                .commit();
-                    } else {
-                        Intent nextActivity = new Intent(FavouriteActivity.this, EmptyActivity.class);
-                        nextActivity.putExtras(dataToPass); //send data to next activity
-                        startActivity(nextActivity); //make the transition
-                    }
+                if (isTablet) {
+                    dFragment = new DetailsFragment();
+                    dFragment.setArguments(dataToPass);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frame, dFragment)
+                            .commit();
+                } else {
+                    Intent nextActivity = new Intent(FavouriteActivity.this, EmptyActivity.class);
+                    nextActivity.putExtras(dataToPass);
+                    startActivity(nextActivity);
                 }
             });
 
-            list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    new AlertDialog.Builder(FavouriteActivity.this)
-                            .setTitle(getResources().getString(R.string.favourite_deleteheader))
-                            .setMessage(getResources().getString(R.string.favourite_deletemsg) + " " + songList.get(position).getTitle() + "?")
-                            .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                                if(songDB.deleteMessage(songList.get(position))){
-                                    Snackbar.make(list, R.string.favourite_deletesuccess, Snackbar.LENGTH_SHORT)
-                                            .show();
-                                }
-                                coverList.remove(position);
-                                songList = songDB.getAll();
-                                adapter.notifyDataSetChanged();
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
-                    return true;
-                }
+            list.setOnItemLongClickListener((parent, view, position, id) -> {
+                new AlertDialog.Builder(FavouriteActivity.this)
+                        .setTitle(getResources().getString(R.string.favourite_deleteheader))
+                        .setMessage(getResources().getString(R.string.favourite_deletemsg) + " " + songList.get(position).getTitle() + "?")
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            if (songDB.deleteMessage(songList.get(position))) {
+                                Snackbar.make(list, R.string.favourite_deletesuccess, Snackbar.LENGTH_SHORT)
+                                        .show();
+                            }
+                            coverList.remove(position);
+                            songList = songDB.getAll();
+                            adapter.notifyDataSetChanged();
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
+                return true;
             });
 
 

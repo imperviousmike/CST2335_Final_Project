@@ -264,12 +264,12 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
             return "Done";
         }
 
+        @Override
         public void onProgressUpdate(Integer... args) {
             progressBar.setProgress(args[0]);
         }
-
+        @Override
         public void onPostExecute(String fromDoInBackground) {
-            //this.cancel(true);
             progressBar.setVisibility(View.INVISIBLE);
             if (songList.isEmpty()) {
                 TextView text = findViewById(R.id.notFound);

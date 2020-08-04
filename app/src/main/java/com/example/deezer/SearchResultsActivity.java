@@ -256,11 +256,12 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
             publishProgress(100);
             return "Done";
         }
-
+        @Override
         public void onProgressUpdate(Integer... args) {
             progressBar.setProgress(args[0]);
         }
 
+        @Override
         public void onPostExecute(String fromDoInBackground) {
             progressBar.setVisibility(View.INVISIBLE);
             if (artistList.isEmpty()) {
