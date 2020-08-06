@@ -8,7 +8,6 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.deezer.DeezerActivity;
 import com.example.geodata.GeoDataActivity;
 import com.example.lyrics.LyricsActivity;
 import com.example.soccer.SoccerActivity;
@@ -18,8 +17,6 @@ public class LaunchActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
-
-    private ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
