@@ -15,13 +15,13 @@ public class Song implements Serializable {
     public static final long serialVersionUID = 1L;
 
     public Song(String title, String duration, String albumName, String albumCover, String artist) {
-        this(0,title,duration,albumName,albumCover,artist);
+        this(0, title, duration, albumName, albumCover, artist);
     }
 
     public Song(int id, String title, String duration, String albumName, String albumCover, String artist) {
         this.id = id;
         this.title = title;
-        this.duration = duration;
+        setDuration(duration);
         this.albumName = albumName;
         this.albumCover = albumCover;
         this.artist = artist;
@@ -52,7 +52,13 @@ public class Song implements Serializable {
     }
 
     public void setDuration(String duration) {
-        this.duration = duration;
+        int time = Integer.parseInt(duration);
+        int hours = time / 3600;
+        int remainder = time - hours * 3600;
+        int mins = remainder / 60;
+        remainder = remainder - mins * 60;
+        int secs = remainder;
+        this.duration = String.format("%02d:%02d", mins, secs);
     }
 
     public String getAlbumName() {
@@ -88,8 +94,8 @@ public class Song implements Serializable {
     }
 
     @Override
-    public String toString(){
-       return String.format("Title: %s \n Artist: %s", getTitle(), getArtist());
+    public String toString() {
+        return String.format("Title: %s \n Artist: %s", getTitle(), getArtist());
     }
 
 
