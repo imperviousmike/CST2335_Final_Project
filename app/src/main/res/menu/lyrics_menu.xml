@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/deezer"
-        android:icon="@drawable/deezer"
+        android:icon="@drawable/deezer_small"
         android:orderInCategory="50"
         android:title="@string/root_deezerButton"
         app:showAsAction="always" />  <!-- This uses showAsAction=always, so look at icon= parameter -->
@@ -18,7 +18,7 @@
 
     <item
         android:id="@+id/geo"
-        android:icon="@drawable/world"
+        android:icon="@drawable/world_small"
         android:orderInCategory="100"
         android:title="@string/root_globeButton"
         app:showAsAction="always" />
