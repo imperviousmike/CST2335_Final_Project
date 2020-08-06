@@ -138,9 +138,16 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
         String message = null;
         switch (item.getItemId()) {
             case R.id.globe:
+                Intent gotoGeo = new Intent(SongsResultsActivity.this, com.example.geodata.GeoDataActivity.class);
+                startActivity(gotoGeo);
+                break;
             case R.id.soccer:
+                Intent gotoSoccer = new Intent(SongsResultsActivity.this, com.example.soccer.SoccerActivity.class);
+                startActivity(gotoSoccer);
+                break;
             case R.id.lyric:
-                message = getResources().getString(R.string.root_toast_message);
+                Intent gotoLyric = new Intent(SongsResultsActivity.this, com.example.lyrics.LyricsActivity.class);
+                startActivity(gotoLyric);
                 break;
             case R.id.about:
                 message = getResources().getString(R.string.toolbar_about_msg);

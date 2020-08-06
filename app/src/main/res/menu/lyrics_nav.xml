@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="@string/nav_header_app">
+        <menu>
+            <item
+                android:id="@+id/instruc"
+                android:icon="@drawable/instructions"
+                android:orderInCategory="50"
+                android:title="@string/nav_instructions"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/aboutAPI"
+                android:icon="@drawable/about"
+                android:orderInCategory="100"
+                android:title="@string/nav_about"
+                app:showAsAction="always" />
+
+            <item
+                android:id="@+id/donate"
+                android:icon="@drawable/donate"
+                android:orderInCategory="200"
+                android:title="@string/nav_donate"
+                app:showAsAction="always" />
+        </menu>
+    </item>
+</menu>

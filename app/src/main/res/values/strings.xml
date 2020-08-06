@@ -38,4 +38,15 @@
     <string name="favourite_exists">This song has already been added to favourites!</string>
     <string name="favourite_addsuccess">Succesfully added to favourites</string>
     <string name="favourite_deletesuccess">Sucessfully removed from favourites</string>
+    <string name="geo_instruction_message">Enter latitude and longitude to find nearby cities. Each result will produce relevant information to the city.</string>
+    <string name="geo_headertext">Geo Data Source</string>
+    <string name="toolbar_geo_msg">This is the Geo Data Source app. Written by Michael Daly</string>
+    <string name="geo_api">https://www.geodatasource.com/web-service</string>
+    <string name="lyric_instruction_message">The user can type in an artist or group’s name, followed by the title of one of their songs, and the API will retrieve the lyrics</string>
+    <string name="lyric_header">Song Lyrics Search</string>
+    <string name="toolbar_lyrics_msg">This is the Song Lyrics Search app. Written by Michael Daly</string>
+    <string name="toolbar_soccer_msg">This is the Soccer match highlights app. Written by Michael Daly.</string>
+    <string name="soccer_instructions">Retrieve a list of soccer matches that were recently played. Save the details of any match and be able to watch the highlights.</string>
+    <string name="soccer_api">https://www.scorebat.com/video-api/</string>
+    <string name="soccer_headertext">Soccer match highlights</string>
 </resources>

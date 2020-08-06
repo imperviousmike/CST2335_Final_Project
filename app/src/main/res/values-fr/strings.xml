@@ -39,4 +39,15 @@
     <string name="favourite_exists">Cette chanson a déjà été ajoutée aux favoris!</string>
     <string name="favourite_addsuccess">Ajouté avec succès aux favoris</string>
     <string name="favourite_deletesuccess">Suppression réussie des favoris</string>
+    <string name="geo_instruction_message">"Entrez la latitude et la longitude pour trouver les villes à proximité. Chaque résultat produira des informations pertinentes pour la ville.  "</string>
+    <string name="geo_headertext">Source de données géographiques</string>
+    <string name="toolbar_geo_msg">Ceci est l\'application Geo Data Source. Écrit par Michael Daly</string>
+    <string name="geo_api">https://www.geodatasource.com/web-service</string>
+    <string name="lyric_instruction_message">L\'utilisateur peut taper le nom d\'un artiste ou d\'un groupe, suivi du titre de l\'une de ses chansons, et l\'API récupérera les paroles</string>
+    <string name="lyric_header">echerche de paroles de chansons</string>
+    <string name="toolbar_lyrics_msg">Ceci est l\'application de recherche de paroles de chansons. Écrit par Michael Daly</string>
+    <string name="toolbar_soccer_msg">"Ceci est l'application des faits saillants du match de football. Écrit par Michael Daly.  "</string>
+    <string name="soccer_instructions">Récupérez une liste des matchs de football qui ont été joués récemment. Enregistrez les détails de n\'importe quel match et soyez en mesure de regarder les moments forts.</string>
+    <string name="soccer_api">https://www.scorebat.com/video-api/</string>
+    <string name="soccer_headertext">Faits saillants du match de football</string>
 </resources>

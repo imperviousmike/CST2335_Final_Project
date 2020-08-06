@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.deezer.DeezerActivity;
+import com.example.geodata.GeoDataActivity;
+import com.example.lyrics.LyricsActivity;
+import com.example.soccer.SoccerActivity;
 
 
 public class LaunchActivity extends AppCompatActivity {
@@ -28,11 +31,20 @@ public class LaunchActivity extends AppCompatActivity {
         Button lyricButton = findViewById(R.id.lyricButton);
         Button deezerButton = findViewById(R.id.deezerButton);
 
-        geoButton.setOnClickListener(a -> Toast.makeText(this, getResources().getString(R.string.root_toast_message),Toast.LENGTH_LONG).show());
-        soccerButton.setOnClickListener(a -> Toast.makeText(this, getResources().getString(R.string.root_toast_message),Toast.LENGTH_LONG).show());
-        lyricButton.setOnClickListener(a -> Toast.makeText(this, getResources().getString(R.string.root_toast_message),Toast.LENGTH_LONG).show());
+        geoButton.setOnClickListener(a -> {
+            Intent goToGeo = new Intent(LaunchActivity.this, GeoDataActivity.class);
+            startActivity(goToGeo);
+        });
+        soccerButton.setOnClickListener(a -> {
+            Intent goToSoccer = new Intent(LaunchActivity.this, SoccerActivity.class);
+            startActivity(goToSoccer);
+        });
+        lyricButton.setOnClickListener(a -> {
+            Intent gotoLyric = new Intent(LaunchActivity.this, LyricsActivity.class);
+            startActivity(gotoLyric);
+        });
         deezerButton.setOnClickListener(a -> {
-            Intent goToDeezer= new Intent(LaunchActivity.this, DeezerActivity.class);
+            Intent goToDeezer = new Intent(LaunchActivity.this, DeezerActivity.class);
             startActivity(goToDeezer);
         });
 
