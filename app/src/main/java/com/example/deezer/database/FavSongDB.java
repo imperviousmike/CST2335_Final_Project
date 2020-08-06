@@ -62,7 +62,6 @@ public class FavSongDB extends SQLiteOpenHelper {
         Cursor c = db.query(TABLE_NAME, columns, null, null, null, null, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
-            printCursor(c, VERSION_NUM);
             songList.add(new Song(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4), c.getString(5)));
             c.moveToNext();
         }
@@ -79,11 +78,4 @@ public class FavSongDB extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    private void printCursor(Cursor c, int version) {
-        Log.i("printCursor", "DB version number: " + version
-                + "\nNumber of columns: "
-                + c.getColumnCount()
-                + "\nColumn Names: " + c.getColumnNames()
-                + "\nNumber of rows: " + c.getColumnCount());
-    }
 }
