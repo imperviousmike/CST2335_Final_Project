@@ -115,11 +115,13 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
         switch (item.getItemId()) {
             case R.id.search:
                 Intent gotoResults = new Intent(SearchResultsActivity.this, DeezerActivity.class);
+                gotoResults.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(gotoResults);
                 break;
 
             case R.id.fav:
                 Intent gotoFav = new Intent(SearchResultsActivity.this, FavouriteActivity.class);
+                gotoFav.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(gotoFav);
                 break;
 

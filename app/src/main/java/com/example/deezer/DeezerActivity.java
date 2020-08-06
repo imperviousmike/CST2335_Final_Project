@@ -156,7 +156,7 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
         SharedPreferences.Editor edit = prefs.edit();
         EditText search = findViewById(R.id.searchText);
         edit.putString(SEARCH_KEY, search.getText().toString());
-        edit.commit();
+        edit.apply();
     }
 
     @Override
@@ -173,6 +173,12 @@ public class DeezerActivity extends AppCompatActivity implements NavigationView.
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        SharedPreferences prefs = this.getSharedPreferences(
+                "com.example.deezer", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        EditText search = findViewById(R.id.searchText);
+        edit.putString(SEARCH_KEY, search.getText().toString());
+        edit.commit();
     }
 
     @Override

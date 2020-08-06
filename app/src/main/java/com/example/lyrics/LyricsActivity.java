@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.geodata.GeoDataActivity;
 import com.example.root.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -52,8 +53,9 @@ public class LyricsActivity extends AppCompatActivity implements NavigationView.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deezer:
-                Intent gotoGeo = new Intent(LyricsActivity.this, com.example.deezer.DeezerActivity.class);
-                startActivity(gotoGeo);
+                Intent gotoDeezer = new Intent(LyricsActivity.this, com.example.deezer.DeezerActivity.class);
+                gotoDeezer.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(gotoDeezer);
                 break;
             case R.id.soccer:
                 Intent gotoSoccer = new Intent(LyricsActivity.this, com.example.soccer.SoccerActivity.class);

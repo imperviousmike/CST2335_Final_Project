@@ -52,8 +52,9 @@ public class GeoDataActivity extends AppCompatActivity implements NavigationView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deezer:
-                Intent gotoGeo = new Intent(GeoDataActivity.this, com.example.deezer.DeezerActivity.class);
-                startActivity(gotoGeo);
+                Intent gotoDeezer = new Intent(GeoDataActivity.this, com.example.deezer.DeezerActivity.class);
+                gotoDeezer.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(gotoDeezer);
                 break;
             case R.id.soccer:
                 Intent gotoSoccer = new Intent(GeoDataActivity.this, com.example.soccer.SoccerActivity.class);

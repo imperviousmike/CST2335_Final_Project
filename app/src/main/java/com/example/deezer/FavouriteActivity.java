@@ -111,10 +111,12 @@ public class FavouriteActivity extends AppCompatActivity implements NavigationVi
         switch (item.getItemId()) {
             case R.id.search:
                 Intent gotoResults = new Intent(FavouriteActivity.this, DeezerActivity.class);
+                gotoResults.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(gotoResults);
                 break;
             case R.id.fav:
                 Intent gotoFav = new Intent(FavouriteActivity.this, FavouriteActivity.class);
+                gotoFav.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(gotoFav);
                 break;
             case R.id.instruc:

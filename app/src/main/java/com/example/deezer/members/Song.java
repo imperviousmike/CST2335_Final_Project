@@ -52,13 +52,18 @@ public class Song implements Serializable {
     }
 
     public void setDuration(String duration) {
-        int time = Integer.parseInt(duration);
-        int hours = time / 3600;
-        int remainder = time - hours * 3600;
-        int mins = remainder / 60;
-        remainder = remainder - mins * 60;
-        int secs = remainder;
-        this.duration = String.format("%02d:%02d", mins, secs);
+        if(duration.length() < 4) {
+            int time = Integer.parseInt(duration);
+            int hours = time / 3600;
+            int remainder = time - hours * 3600;
+            int mins = remainder / 60;
+            remainder = remainder - mins * 60;
+            int secs = remainder;
+            this.duration = String.format("%02d:%02d", mins, secs);
+        }
+        else {
+            this.duration = duration;
+        }
     }
 
     public String getAlbumName() {

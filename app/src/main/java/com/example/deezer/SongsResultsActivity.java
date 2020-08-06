@@ -160,6 +160,7 @@ public class SongsResultsActivity extends AppCompatActivity implements Navigatio
         switch (item.getItemId()) {
             case R.id.search:
                 Intent gotoResults = new Intent(SongsResultsActivity.this, DeezerActivity.class);
+                gotoResults.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(gotoResults);
                 break;
 

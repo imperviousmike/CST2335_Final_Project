@@ -43,8 +43,9 @@ public class LaunchActivity extends AppCompatActivity {
             startActivity(gotoLyric);
         });
         deezerButton.setOnClickListener(a -> {
-            Intent goToDeezer = new Intent(LaunchActivity.this, DeezerActivity.class);
-            startActivity(goToDeezer);
+            Intent gotoDeezer = new Intent(LaunchActivity.this, com.example.deezer.DeezerActivity.class);
+            gotoDeezer.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(gotoDeezer);
         });
 
     }
