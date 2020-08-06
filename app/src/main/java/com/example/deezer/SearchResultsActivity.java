@@ -90,7 +90,6 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String message = null;
         switch (item.getItemId()) {
             case R.id.globe:
                 Intent gotoGeo = new Intent(SearchResultsActivity.this, com.example.geodata.GeoDataActivity.class);
@@ -105,10 +104,9 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                 startActivity(gotoLyric);
                 break;
             case R.id.about:
-                message = getResources().getString(R.string.toolbar_about_msg);
+                Toast.makeText(this, getResources().getString(R.string.toolbar_about_msg), Toast.LENGTH_LONG).show();
                 break;
         }
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         return true;
     }
 
